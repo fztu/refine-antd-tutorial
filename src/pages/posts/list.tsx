@@ -19,7 +19,9 @@ import {
     Create,
     Edit,
     Radio,
-    Input
+    Input,
+    useModalForm, 
+    Modal,
 } from "@pankod/refine-antd";
 
 import { IPost, ICategory } from "interfaces";
@@ -50,14 +52,27 @@ export const PostList: React.FC = () => {
     //     action: "create",
     // });
 
+    // const {
+    //     drawerProps,
+    //     formProps,
+    //     show,
+    //     saveButtonProps,
+    //     deleteButtonProps,
+    //     id,
+    // } = useDrawerForm<IPost>({
+    //     action: "edit",
+    // });
+
+    // const { modalProps, formProps, show } = useModalForm<IPost>({
+    //     action: "create",
+    // });
+
     const {
-        drawerProps,
+        modalProps,
         formProps,
         show,
-        saveButtonProps,
-        deleteButtonProps,
         id,
-    } = useDrawerForm<IPost>({
+    } = useModalForm<IPost>({
         action: "edit",
     });
 
@@ -122,11 +137,7 @@ export const PostList: React.FC = () => {
                                         recordItemId={record.id}
                                         hideText
                                     />
-                                    <EditButton
-                                        size="small"
-                                        recordItemId={record.id}
-                                        onClick={() => show(record.id)}
-                                    />
+                                    <EditButton onClick={() => show(record.id)} />
                                     <DeleteButton
                                         size="small"
                                         recordItemId={record.id}
@@ -138,8 +149,8 @@ export const PostList: React.FC = () => {
                     />
                 </Table>
             </List>
-            <Drawer {...drawerProps}>
-                {/* <Create saveButtonProps={saveButtonProps}>
+            {/* <Drawer {...drawerProps}>
+                <Create saveButtonProps={saveButtonProps}>
                     <Form {...formProps} layout="vertical">
                         <Form.Item label="Title" name="title">
                             <Input />
@@ -152,7 +163,7 @@ export const PostList: React.FC = () => {
                             </Radio.Group>
                         </Form.Item>
                     </Form>
-                </Create> */}
+                </Create>
                 <Edit
                     saveButtonProps={saveButtonProps}
                     deleteButtonProps={deleteButtonProps}
@@ -171,7 +182,21 @@ export const PostList: React.FC = () => {
                         </Form.Item>
                     </Form>
                 </Edit>
-            </Drawer>
+            </Drawer> */}
+            <Modal {...modalProps}>
+                <Form {...formProps} layout="vertical">
+                    <Form.Item label="Title" name="title">
+                        <Input />
+                    </Form.Item>
+                    <Form.Item label="Status" name="status">
+                        <Radio.Group>
+                            <Radio value="draft">Draft</Radio>
+                            <Radio value="published">Published</Radio>
+                            <Radio value="rejected">Rejected</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     );
 };
