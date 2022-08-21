@@ -1,72 +1,101 @@
 import {
-    useForm,
+    useStepsForm,
+    useSelect,
     Form,
     Input,
     Select,
+    Steps,
+    Button,
+    SaveButton,
     Edit,
-    useSelect,
 } from "@pankod/refine-antd";
-import { IPost } from "interfaces";
+
+import { IPost, ICategory, ITag, ILanguage } from "interfaces";
 
 export const PostEdit: React.FC = () => {
-    const { formProps, saveButtonProps, queryResult } = useForm<IPost>();
+    const {
+        current,
+        gotoStep,
+        stepsProps,
+        formProps,
+        saveButtonProps,
+        queryResult,
+        submit,
+    } = useStepsForm<IPost>();
 
-    const { selectProps: categorySelectProps } = useSelect<IPost>({
+    const postData = queryResult?.data?.data;
+    const { selectProps: categorySelectProps } = useSelect<ICategory>({
         resource: "categories",
-        defaultValue: queryResult?.data?.data?.category.id,
+        defaultValue: postData?.category.id,
     });
 
+    const formList = [
+        <>
+            <Form.Item
+                label="Title"
+                name="title"
+                rules={[
+                    {
+                        required: true,
+                    },
+                ]}
+            >
+                <Input />
+            </Form.Item>
+        </>,
+        <>
+            <Form.Item
+                label="Category"
+                name={["category", "id"]}
+                rules={[
+                    {
+                        required: true,
+                    },
+                ]}
+            >
+                <Select {...categorySelectProps} />
+            </Form.Item>
+        </>,
+    ];
+
     return (
-        <Edit saveButtonProps={saveButtonProps}>
+        <Edit
+            actionButtons={
+                <>
+                    {current > 0 && (
+                        <Button
+                            onClick={() => {
+                                gotoStep(current - 1);
+                            }}
+                        >
+                            Previous
+                        </Button>
+                    )}
+                    {current < formList.length - 1 && (
+                        <Button
+                            onClick={() => {
+                                gotoStep(current + 1);
+                            }}
+                        >
+                            Next
+                        </Button>
+                    )}
+                    {current === formList.length - 1 && (
+                        <SaveButton
+                            {...saveButtonProps}
+                            style={{ marginRight: 10 }}
+                            onClick={() => submit()}
+                        />
+                    )}
+                </>
+            }
+        >
+            <Steps {...stepsProps}>
+                <Steps.Step title="First Step" />
+                <Steps.Step title="Second Step" />
+            </Steps>
             <Form {...formProps} layout="vertical">
-                <Form.Item
-                    label="Title"
-                    name="title"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Status"
-                    name="status"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
-                >
-                    <Select
-                        options={[
-                            {
-                                label: "Published",
-                                value: "published",
-                            },
-                            {
-                                label: "Draft",
-                                value: "draft",
-                            },
-                            {
-                                label: "Rejected",
-                                value: "rejected",
-                            },
-                        ]}
-                    />
-                </Form.Item>
-                <Form.Item
-                    label="Category"
-                    name={["category", "id"]}
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
-                >
-                    <Select {...categorySelectProps} />
-                </Form.Item>
+                {formList[current]}
             </Form>
         </Edit>
     );
