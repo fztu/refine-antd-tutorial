@@ -15,3 +15,8 @@ interface ITag {
     id: number;
     title: string;
 }
+
+interface ILanguage {
+    id: number;
+    title: string;
+}

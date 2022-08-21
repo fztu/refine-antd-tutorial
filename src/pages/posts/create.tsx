@@ -7,9 +7,11 @@ import {
     useSelect,
     Checkbox,
     useCheckboxGroup,
+    Radio,
+    useRadioGroup,
 } from "@pankod/refine-antd";
 
-import { IPost, ITag } from "interfaces";
+import { IPost, ITag, ILanguage } from "interfaces";
 
 export const PostCreate = () => {
     const { formProps, saveButtonProps } = useForm<IPost>();
@@ -19,6 +21,10 @@ export const PostCreate = () => {
 
     const { checkboxGroupProps } = useCheckboxGroup<ITag>({
         resource: "tags",
+    });
+
+    const { radioGroupProps } = useRadioGroup<ILanguage>({
+        resource: "languages",
     });
 
     return (
@@ -74,6 +80,9 @@ export const PostCreate = () => {
                 </Form.Item>
                 <Form.Item label="Tags" name="tags">
                     <Checkbox.Group {...checkboxGroupProps} />
+                </Form.Item>
+                <Form.Item label="Languages" name="languages">
+                    <Radio.Group {...radioGroupProps} />
                 </Form.Item>
             </Form>
         </Create>
