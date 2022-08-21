@@ -10,3 +10,8 @@ export interface IPost {
     category: { id: number };
     createdAt: string;
 }
+
+interface ITag {
+    id: number;
+    title: string;
+}

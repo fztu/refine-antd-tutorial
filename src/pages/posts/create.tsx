@@ -5,14 +5,20 @@ import {
     Select,
     useForm,
     useSelect,
+    Checkbox,
+    useCheckboxGroup,
 } from "@pankod/refine-antd";
 
-import { IPost } from "interfaces";
+import { IPost, ITag } from "interfaces";
 
 export const PostCreate = () => {
     const { formProps, saveButtonProps } = useForm<IPost>();
     const { selectProps: categorySelectProps } = useSelect<IPost>({
         resource: "categories",
+    });
+
+    const { checkboxGroupProps } = useCheckboxGroup<ITag>({
+        resource: "tags",
     });
 
     return (
@@ -65,6 +71,9 @@ export const PostCreate = () => {
                     ]}
                 >
                     <Select {...categorySelectProps} />
+                </Form.Item>
+                <Form.Item label="Tags" name="tags">
+                    <Checkbox.Group {...checkboxGroupProps} />
                 </Form.Item>
             </Form>
         </Create>
