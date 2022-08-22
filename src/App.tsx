@@ -9,6 +9,8 @@ import "@pankod/refine-antd/dist/styles.min.css";
 import routerProvider from "@pankod/refine-react-router-v6";
 import dataProvider from "@pankod/refine-simple-rest";
 
+import "styles/antd.less";
+
 import { PostList, PostShow, PostEdit, PostCreate } from "./pages/posts";
 
 function App() {
